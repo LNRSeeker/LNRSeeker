@@ -3,6 +3,8 @@ util.py
 useful functions
 """
 
+from predictor import predictor
+
 def load_fasta(filename):
     """
     resolve the fasta file as a map in the form of  {id:seq}
@@ -19,3 +21,11 @@ def load_fasta(filename):
 
     return ret
 
+
+def reload_predictor(atrans, fe, model):
+    ret = predictor()
+    ret.model = model
+    ret.atrans = atrans
+    ret.fe = fe
+
+    return fe
