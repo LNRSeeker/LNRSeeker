@@ -87,7 +87,7 @@ class predictor:
             df.to_csv("data_" + str(temp_int) + ".csv", index_col=False)
 
         y = np.asarray(df.verdict[:])
-        X = np.asarry(df.drop('verdict', axis=1))
+        X = np.asarray(df.drop('verdict', axis=1))
 
         # 归一化
         self.atrans = Transform(X)
