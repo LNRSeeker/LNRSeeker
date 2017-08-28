@@ -1,5 +1,3 @@
-import sys
-
 import numpy as np
 
 from alpha import condonBias
@@ -52,7 +50,7 @@ class feature_extractor():
                + list(sScorel) + list(condonBias_orf) + list(condonBias_t)  # + list(hp) + list(dist)
 
 
-    def extract_features_using_dict(self, code, seq, verbose=1):
+    def extract_features_using_dict(self, code, seq):
         """
     
         :param seq: the rna test sequence
@@ -60,11 +58,6 @@ class feature_extractor():
         :param verbose: if verbose is 1, a serial number will be outputted.
         :return: a json with {name: feature}
         """
-
-        # TODO: implement efuj.
-        self.seq_cnt += 1
-        if verbose == 1:
-            print(self.seq_cnt)
         features_dict = {'ID': code, 'seq': seq}
 
         try:
@@ -118,7 +111,6 @@ class feature_extractor():
             #        + list(sScorel) + list(condonBias_orf) + list(condonBias_t)
         except:
             features_dict['exception'] = 'Yes'
-            features_dict['exception_args'] = sys.exc_info()
             return features_dict
 
 
