@@ -17,6 +17,14 @@ from alpha.transform import Transform
 from hexmer import get_score_matrix
 
 
+def _parse_seq(args):
+    fe, code, seq = args
+    new_dict = fe.extract_features_using_dict(code, seq)
+    if 'exception' in new_dict.keys():
+        return None
+    else:
+        return new_dict
+
 class predictor:
 
     # 之所以将predictor写成类，主要是为了方便存储和复现
@@ -31,6 +39,7 @@ class predictor:
         console.setLevel(logging.INFO)
         logging.getLogger("").addHandler(console)
         self._logger = logging.getLogger("predictor.default")
+
 
     @property
     def logger(self):
@@ -53,19 +62,19 @@ class predictor:
 
         with open(coding_filename, "r") as f:
             lines = f.readlines()
-        args0 = [(lines[i][:-1], lines[i + 1][:-1]) for i in range(0, len(lines), 2)]
+        args0 = [(self.fe, lines[i][:-1], lines[i + 1][:-1]) for i in range(0, len(lines), 2)]
 
         with open(non_coding_filename, "r") as f:
             lines = f.readlines()
-        args1 = [(lines[i][:-1], lines[i + 1][:-1]) for i in range(0, len(lines), 2)]
+        args1 = [(self.fe, lines[i][:-1], lines[i + 1][:-1]) for i in range(0, len(lines), 2)]
 
         # FIXME: find the object unable to be serialized!
-        with mp.Pool(processes = 4) as pool:
-            data0 = pool.map(self._parse_seq, args0)
+        with mp.Pool(processes=8) as pool:
+            data0 = pool.map(_parse_seq, args0)
             data0 = [x for x in data0 if not x is None]
             for i in range(len(data0)):
                 data0[i]['verdict'] = 0
-            data1 = pool.map(self._parse_seq, args1)
+            data1 = pool.map(_parse_seq, args1)
             data1 = [x for x in data1 if not x is None]
             for i in range(len(data1)):
                 data1[i]['verdict'] = 1
@@ -204,12 +213,7 @@ class predictor:
 
         self._logger.info("Training network Done")
 
-    def _parse_seq(self, code, seq):
-        new_dict = self.fe.extract_features_using_dict(code, seq)
-        if 'exception' in new_dict.keys():
-            return None
-        else:
-            return new_dict
+
 
     def predict(self, seq, code=""):
         features = self.fe.extract_features_using_dict(code, seq)
