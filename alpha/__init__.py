@@ -1,21 +1,23 @@
+import sys
+
 import numpy as np
 
 from alpha import condonBias
+from alpha.condonBias import getCodonFreq
+from alpha.constants import kozak_dict, trna
 from alpha.kmotif import getKmotif
 from alpha.orf_finder import get_max_orf
-from alpha.sScore import findMaxInterval, sscores
-from alpha.zcurve import getZcurve
-from alpha.constants import kozak_dict, trna
 from alpha.ribosome_coverage import get_ribosome_coverage
+from alpha.sScore import findMaxInterval, sscores
 from alpha.translate import hydrophobicity, complexity, get_amio_acid_comp
-from alpha.condonBias import getCodonFreq
-import sys, os
+from alpha.zcurve import getZcurve
+
 
 class feature_extractor():
 
     def __init__(self, sMatrix):
         self.sMatrix = sMatrix
-
+        self.seq_cnt = 0
 
     def extact_features(self, seq):
         """
@@ -50,18 +52,19 @@ class feature_extractor():
                + list(sScorel) + list(condonBias_orf) + list(condonBias_t)  # + list(hp) + list(dist)
 
 
-    def extract_features_using_dict(self, code, seq):
+    def extract_features_using_dict(self, code, seq, verbose=1):
         """
     
         :param seq: the rna test sequence
+        :param code: the ID of transcripts
+        :param verbose: if verbose is 1, a serial number will be outputted.
         :return: a json with {name: feature}
         """
 
         # TODO: implement efuj.
-
-        global seq_cnt
-        seq_cnt += 1
-        print(seq_cnt)
+        self.seq_cnt += 1
+        if verbose == 1:
+            print(self.seq_cnt)
         features_dict = {'ID': code, 'seq': seq}
 
         try:

@@ -1,32 +1,22 @@
 
-from alpha import feature_extractor
-import argparse
-
-# %load save_model.py
 from __future__ import print_function
 
-import multiprocessing
-import pickle as pkl
-
-import numpy as np
-import pandas as pd
-
-import sklearn.model_selection
-import time
+import argparse
 import logging
 
 import keras.objectives
 import keras.optimizers
-import sklearn.metrics
+import numpy as np
+import pandas as pd
 from keras.layers import Dense, Input
 from keras.models import Model
 
 from alpha import feature_extractor
 from alpha.transform import Transform
 from hexmer import get_score_matrix
-import json
 
-import logging
+
+# %load save_model.py
 
 class predictor:
 
@@ -38,7 +28,10 @@ class predictor:
         self.atrans = None # atrans 是将数据归一化的结构
         self.s_score_matrix = None # s_score_matrix 是计算SScore的矩阵
         self.fe = None
-        self._logger = None
+        console = logging.StreamHandler()
+        console.setLevel(logging.INFO)
+        logging.getLogger("").addHandler(console)
+        self._logger = logging.getLogger("predictor.default")
 
     @property
     def logger(self):
@@ -49,11 +42,14 @@ class predictor:
         self._logger = value
 
     def train(self, coding_filename, non_coding_filename,
-              sScoreMatrix_filename, save_input=False):
+              sScoreMatrix=None, save_input=False):
 
         # 读取数据
-
-        sScoreMatrix = get_score_matrix(coding_filename, non_coding_filename)
+        self._logger.info("Reading training_set")
+        if sScoreMatrix is None:
+            self._logger.info("Calculating the matrix for S-Score")
+            sScoreMatrix = get_score_matrix(coding_filename, non_coding_filename)
+            self._logger.info("[DONE] Calculating the matrix for S-Score")
         self.fe = fe = feature_extractor(sScoreMatrix)
 
         fss = list()
@@ -105,6 +101,7 @@ class predictor:
         #else:
         #    logger.info("Checking the default model.")
 
+        self._logger.info("Training network")
         verbose_level = 2
         myorg_dim = len(X_train[0])
         original_dim = (len(X_train[0]),)
@@ -211,6 +208,8 @@ class predictor:
         self.model.compile(optimizer="RMSprop", loss=keras.objectives.binary_crossentropy,
                            metrics=["accuracy"])
         self.model.fit(X_train, y_train, epochs=mlp_epoch, shuffle=True, verbose=verbose_level)
+
+        self._logger.info("Training network Done")
 
 
     def predict(self, seq):
