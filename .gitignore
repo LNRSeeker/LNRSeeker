@@ -9,7 +9,7 @@
 .idea/workspace.xml
 __pycache__/
 
-xalpha/.DS_Store
+alpha/.DS_Store
 alpha/__init__.pyc
 alpha/__pycache__/
 alpha/condonBias.pyc
@@ -18,3 +18,8 @@ alpha/orf_finder.pyc
 alpha/sScore.pyc
 alpha/util.pyc
 alpha/zcurve.pyc	
+alpha/*.pyc
+
+*.pyc
+*~
+
