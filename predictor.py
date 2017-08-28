@@ -86,11 +86,11 @@ class predictor:
             temp_int = random.randint(1, 65536)
             df.to_csv("data_" + str(temp_int) + ".csv", index_col=False)
 
-        y = df.verdict[:]
-        X = df.drop('verdict', axis=1)
+        y = np.asarray(df.verdict[:])
+        X = np.asarry(df.drop('verdict', axis=1))
 
         # 归一化
-        self.atrans = Transform.transform(X)
+        self.atrans = Transform(X)
         X_train = self.atrans.transform(X)
         y_train = y
 
