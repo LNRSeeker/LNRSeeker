@@ -223,7 +223,7 @@ class predictor:
             se = pd.Series(features)
             se = se.drop(['ID', 'seq', 'kozak1', 'kozak2'])
             x = np.asarray(se)
-            x.shape = (len(se), )
+            x.shape = (1, len(se))
             p = self.model.predict(x)
             p = p[0] # Turn a 1x1 matrix to a scale
             return p
