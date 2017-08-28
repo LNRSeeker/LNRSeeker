@@ -3,7 +3,6 @@ util.py
 useful functions
 """
 
-from predictor import predictor
 
 def load_fasta(filename):
     """
@@ -21,11 +20,3 @@ def load_fasta(filename):
 
     return ret
 
-
-def reload_predictor(atrans, fe, model):
-    ret = predictor()
-    ret.model = model
-    ret.atrans = atrans
-    ret.fe = fe
-
-    return fe
