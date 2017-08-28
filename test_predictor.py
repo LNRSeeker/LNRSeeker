@@ -14,5 +14,5 @@ if __name__ == '__main__':
     model.train(GENE_TRAIN, LNCRNA_TRAIN)
 
     import pickle as pkl
-    with open("mymodel.pkl", "rb") as f:
+    with open("mymodel.pkl", "wb") as f:
         pkl.dump(model, f)
