@@ -15,4 +15,4 @@ if __name__ == '__main__':
 
     import pickle as pkl
     with open("mymodel.pkl", "wb") as f:
-        pkl.dump(model, f)
+        pkl.dump((model.atrans, model.fe, model.model), f)
