@@ -221,7 +221,7 @@ class predictor:
             return 1
         else:
             se = pd.Series(features)
-            se.drop(['ID', 'seq', 'kozak1', 'kozak2'])
+            se = se.drop(['ID', 'seq', 'kozak1', 'kozak2'])
             x = np.asarray(se)
             x.shape = (len(se), )
             p = self.model.predict(x)
