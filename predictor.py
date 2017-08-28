@@ -211,8 +211,8 @@ class predictor:
         else:
             return new_dict
 
-    def predict(self, seq):
-        features = self.fe.extract_features_using_dict(seq)
+    def predict(self, seq, code=""):
+        features = self.fe.extract_features_using_dict(code, seq)
         if 'exception' in features.keys():
             return 1
         else:
