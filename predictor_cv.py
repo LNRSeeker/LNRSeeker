@@ -15,7 +15,7 @@ class predictor_cv(predictor):
     """
 
     def __init__(self):
-        super.__init__()
+        super.__init__(self)
 
     def train_by_data(self, x_train, y_train):
         """
