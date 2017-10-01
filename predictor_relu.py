@@ -3,6 +3,7 @@ from __future__ import print_function
 import keras.objectives
 import keras.optimizers
 from keras.layers import Dense, Input
+from keras.layers.advanced_activations import LeakyReLU
 from keras.models import Model
 
 from alpha.transform import Transform
@@ -86,8 +87,10 @@ class predictor_cv_relu(predictor_cv):
 
         # 定义网络
         x = Input(shape=original_dim)
-        encoder_1 = Dense(hidden_dim_1, activation='relu')
-        decoder_1 = Dense(original_dim[0], activation='relu')
+        encoder_1 = Dense(hidden_dim_1)
+        encoder_1 = LeakyReLU(alpha=0.3)(encoder_1)
+        decoder_1 = LeakyReLU(alpha=0.3)(Dense(original_dim[0]))
+
         h = encoder_1(x)
         x_hat = decoder_1(h)
 
@@ -104,8 +107,8 @@ class predictor_cv_relu(predictor_cv):
         encoder = Model(x, h)
         h1 = encoder.predict(X_train)
         x2 = Input(shape=(hidden_dim_1,))
-        encoder_2 = Dense(hidden_dim_2, activation='relu')
-        decoder_2 = Dense(hidden_dim_1, activation='relu')
+        encoder_2 = LeakyReLU(alpha=0.3)(Dense(hidden_dim_2))
+        decoder_2 = LeakyReLU(alpha=0.3)(Dense(hidden_dim_1))
         hh = encoder_2(x2)
         h_hat = decoder_2(hh)
         auto_encdoer_2 = Model(x2, h_hat)
@@ -114,8 +117,8 @@ class predictor_cv_relu(predictor_cv):
         encoder2 = Model(x2, hh)
         h2 = encoder2.predict(h1)
         x3 = Input(shape=(hidden_dim_2,))
-        encoder_3 = Dense(hidden_dim_3, activation='relu')
-        decoder_3 = Dense(hidden_dim_2, activation='relu')
+        encoder_3 = LeakyReLU(alpha=0.3)(Dense(hidden_dim_3))
+        decoder_3 = LeakyReLU(alpha=0.3)(Dense(hidden_dim_2))
 
         hh3 = encoder_3(x3)
         h_hat = decoder_3(hh3)
