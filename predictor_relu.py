@@ -30,9 +30,6 @@ def _parse_seq(args):
 class predictor_cv_relu(predictor):
 
 
-    def __init__(self):
-        super.__init__(self)
-
     def train(self, coding_filename, non_coding_filename, sScoreMatrix=None, save_input=False):
         # 读取数据
         self._logger.info("Reading training_set")
