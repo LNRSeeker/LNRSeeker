@@ -39,8 +39,7 @@ class predictor:
         console.setLevel(logging.INFO)
         logging.getLogger("").addHandler(console)
         self._logger = logging.getLogger("predictor.default")
-        self._params = {'mlp_epochs': 50, 'mlp': 0, 'hidden_dim_3': 125, 'alpha': 1, 'hidden_dim_1': 100, 'a_epoch': 40,
-                 'hidden_dim_2': 100}
+
 
     @property
     def logger(self):
@@ -49,16 +48,6 @@ class predictor:
     @logger.setter
     def logger(self, value):
         self._logger = value
-
-    @property
-    def params(self):
-        return self._params
-
-    @params.setter
-    def params(self, value):
-        if not isinstance(value, type(dict())):
-            raise TypeError("The params should be a dictionary.")
-        self._params = value
 
     def train(self, coding_filename, non_coding_filename,
               sScoreMatrix=None, save_input=False):
@@ -79,7 +68,7 @@ class predictor:
             lines = f.readlines()
         args1 = [(self.fe, lines[i][:-1], lines[i + 1][:-1]) for i in range(0, len(lines), 2)]
 
-
+        # FIXME: find the object unable to be serialized!
         with mp.Pool(processes=8) as pool:
             data0 = pool.map(_parse_seq, args0)
             data0 = [x for x in data0 if not x is None]
@@ -108,8 +97,7 @@ class predictor:
         y_train = y
 
         # 载入神经网络的最佳参数
-
-        params = self._params
+        params = {'mlp_epochs': 50, 'mlp': 0, 'hidden_dim_3': 125, 'alpha': 1, 'hidden_dim_1': 100, 'a_epoch': 40, 'hidden_dim_2': 100}
 
         #    logger.info("Checking the model: \n" + str(params))
         #else:
@@ -225,6 +213,8 @@ class predictor:
 
         self._logger.info("Training network Done")
 
+
+
     def predict(self, seq, code=""):
         features = self.fe.extract_features_using_dict(code, seq)
         if 'exception' in features.keys():
@@ -234,7 +224,6 @@ class predictor:
             se = se.drop(['ID', 'seq', 'kozak1', 'kozak2'])
             x = np.asarray(se)
             x.shape = (1, len(se))
-            x = self.atrans.transform(x)
             p = self.model.predict(x)
             p = p[0] # Turn a 1x1 matrix to a scale
             return p
