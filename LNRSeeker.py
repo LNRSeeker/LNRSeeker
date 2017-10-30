@@ -16,14 +16,14 @@ def check_args(args):
         f = open(model_file, "rb")
         f.close()
     except FileNotFoundError:
-        logging.error("Cannot found file for coding transcripts")
+        logging.error("Cannot found the model")
         return False
 
     try:
         f = open(input_file, "r")
         f.close()
     except FileNotFoundError:
-        logging.error("Cannot found file for coding transcripts")
+        logging.error("Cannot found file of transcripts")
         return False
 
     return True
