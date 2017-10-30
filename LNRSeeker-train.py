@@ -58,17 +58,17 @@ def main():
     # Parse arguments
     parser = argparse.ArgumentParser(description="Train LNRSeeker with transcripts database.")
     parser.add_argument(
-        '-c', dest='coding_file',
+        '-c', dest='coding_file', type=str,
         help='the fasta file of coding transcripts',
         required=True
     )
     parser.add_argument(
-        '-n', dest='non_coding_file',
+        '-n', dest='non_coding_file', type=str,
         help='the fasta file of noncoding transcripts',
         required=True
     )
     parser.add_argument(
-        '-o', dest='output_prefix',
+        '-o', dest='output_prefix', type=str,
         help='the prefix for output file',
         required=True
     )
@@ -78,7 +78,6 @@ def main():
 
     if not check_args(args):
         sys.exit(1)
-
 
     train(args)
 
