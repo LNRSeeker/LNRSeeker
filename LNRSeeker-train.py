@@ -21,7 +21,7 @@ def train(args):
 
     graph = {"atrans":seeker.atrans,
              "fe":seeker.fe,
-             "config":seeker.model.get_config(),
+             "config":seeker.model.to_json(),
              "weights":seeker.model.get_weights()}
 
     with open(output_prefix + "_config.pkl", "wb") as f:
