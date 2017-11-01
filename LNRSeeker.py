@@ -55,7 +55,7 @@ def test(args):
     with open(output_prefix + ".output", "w") as f:
         f.write("Probability\tDescription\n")
         for i in range(len(descs)):
-            f.write("\t".join([str(probs[i]), descs[i]]) + "\n")
+            f.write("\t".join([str(float(probs[i])), descs[i]]) + "\n")
 
 
 def main():
