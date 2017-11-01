@@ -4,7 +4,7 @@ import argparse
 import logging
 from predictor import predictor
 import pickle as pkl
-from keras.models import Model, model_from_config
+from keras.models import Model, model_from_json
 
 def check_args(args):
 
@@ -42,7 +42,7 @@ def test(args):
     seeker = predictor()
     seeker.fe = configs["fe"]
     seeker.atrans = configs["atrans"]
-    seeker.model = model_from_config(configs["config"])
+    seeker.model = model_from_json(configs["config"])
     seeker.model.set_weights(configs["weights"])
 
     with open(input_file, "r") as f:
@@ -78,7 +78,7 @@ def main():
     )
 
     args = parser.parse_args()
-    print(args)
+    
 
     if not check_args(args):
         sys.exit(1)
