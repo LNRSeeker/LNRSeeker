@@ -21,15 +21,12 @@ def train(args):
 
     graph = {"atrans":seeker.atrans,
              "fe":seeker.fe,
-             "config":seeker.model.to_json(),
+             "config":seeker.model.get_config(),
              "weights":seeker.model.get_weights()}
 
     with open(output_prefix + "_config.pkl", "wb") as f:
         pkl.dump(graph, f)
         logger.info("The configuration has been dumped into " + output_prefix + "_config.pkl")
-
-    # for debugging
-    return graph
 
 
 def check_args(args):
