@@ -55,11 +55,10 @@ def test(args):
     with open(output_prefix + ".output", "w") as f:
         f.write("Probability\tDescription\n")
         for i in range(len(descs)):
-            f.write("\t".join([probs[i], descs[i]] + "\n")
-    
+            f.write("\t".join([probs[i], descs[i]]) + "\n")
 
+            
 def main():
-
     parser = argparse.ArgumentParser(description="Train LNRSeeker with transcripts database.")
     parser.add_argument(
         '-m', dest='model_file', type=str,
