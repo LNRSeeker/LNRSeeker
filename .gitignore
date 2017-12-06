@@ -23,5 +23,11 @@ alpha/*.pyc
 *.pyc
 *~
 
-*.pkl
+predictor_*.py
+test_predictor.py
+
 *.log
+.idea/markdown-navigator.xml
+.idea/markdown-navigator/
+
+MAKEFILE
