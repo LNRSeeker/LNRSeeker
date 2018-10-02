@@ -1,2 +1,0 @@
-git_push:
-	git push mathbiosecondary:~/myrna/LNRSeeker master

@@ -2,6 +2,8 @@ import os
 import sys
 import argparse
 import logging
+import pandas as pd
+import numpy as np
 from predictor import predictor
 import pickle as pkl
 from keras.models import Model, model_from_json
@@ -29,6 +31,20 @@ def check_args(args):
     return True
 
 
+def predict_one(seeker, seq):
+    """
+    give the prediction for a sequence.
+    """
+    data = seeker.fe.extract_features_using_dict("tempcode", seq)
+    if 'exception' in data.keys():
+        return 1
+    df = pd.Series(data).drop(['ID', 'seq', 'kozak1', 'kozak2'])
+    x = np.asarray(df)
+    x = seeker.atrans.transform(x)
+    x.shape = (1, 260)
+    y_hat = seeker.model.predict(x)
+    return y_hat[0]
+
 def test(args):
 
     home_prefix = os.getenv("HOME")
@@ -50,7 +66,7 @@ def test(args):
 
     seqs = [lines[i+1][:-1] for i in range(0, len(lines), 2)]
     descs = [lines[i][:-1] for i in range(0, len(lines), 2)]
-    probs = [seeker.predict(s) for s in seqs]
+    probs = [predict_one(seeker, s) for s in seqs]
 
     with open(output_prefix + ".output", "w") as f:
         f.write("Probability\tDescription\n")
